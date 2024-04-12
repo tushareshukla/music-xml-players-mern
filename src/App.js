@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+// frontend/src/components/App.js
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function App() {
+  const [musicData, setMusicData] = useState([]);
+
+  useEffect(() => {
+    axios.get('/music')
+      .then(response => {
+        setMusicData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching music data:', error);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Music Player</h1>
+      <ul>
+        {musicData.map((music, index) => (
+          <li key={index}>{music.title} by {music.composer}</li>
+        ))}
+      </ul>
     </div>
   );
 }
